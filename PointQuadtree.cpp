@@ -21,12 +21,33 @@ public:
 class PointQuadtree	{
 public:
 	bool equalCoordinates(Node* temp, Node* toBeInserted)	{
-		if(temp.x == toBeInserted.x && temp.y == toBeInserted.y)	{
+		if(temp->x == toBeInserted->x && temp->y == toBeInserted->y)	{
 			return true;
 		}
 		else	{
 			return false;
 		}
+	}
+
+	//return the successive quadrant where toBeInserted will be further inserted
+	Node* getQuadrant(Node* temp, Node* toBeInserted)	{
+		if(temp->x < toBeInserted->x)	{
+			if(temp->y < toBeInserted->y)	{
+				return temp->SW;
+			}
+			else	{
+				return temp->NW;
+			}
+		}
+
+		if(temp->y < toBeInserted->y)	{
+			return temp->SE;
+		}
+		else	{
+			return temp->NE;
+		}
+
+
 	}
 
 	bool insert(Node* root, Node* toBeInserted)	{
@@ -35,9 +56,10 @@ public:
 				return true;
 			}
 
-			Node * temp = root;
+			Node* temp = root;
 			while(temp != NULL && !equalCoordinates(temp, toBeInserted))	{
-
+				Node* temp_ = temp;
+				Node* quadrant = getQuadrant(temp, toBeInserted);
 			}
 	}
 
