@@ -58,8 +58,9 @@ public:
 
 			Node* temp = root;
 			while(temp != NULL && !equalCoordinates(temp, toBeInserted))	{
-				Node* temp_ = temp;
+				//Node* temp_ = temp;
 				Node* quadrant = getQuadrant(temp, toBeInserted);
+				insert(quadrant, toBeInserted);
 			}
 	}
 
