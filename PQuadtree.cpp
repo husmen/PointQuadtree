@@ -1,20 +1,16 @@
 #include <iostream>
 #include <cstdlib>
 #include <queue>
-#define NULL 0
 
 using namespace std;
 
 struct Node	{
 	double x;
 	double y;
-	Node* NW;
-	Node* NE;
-	Node* SE;
-	Node* SW;
-
-	//constructor
-	//Node(double x, double y):  x(x),y(y),NW(NULL),NE(NULL),SE(NULL),SW(NULL) {}
+	struct Node* NW;
+	struct Node* NE;
+	struct Node* SE;
+	struct Node* SW;
 } ;
 struct Node* root=NULL;
 
@@ -61,6 +57,25 @@ public:
 		}
 	}
 
+    //insert into the final quadrant found
+    struct Node* insertPointInFinalQuadrant(struct Node* temp, struct Node* toBeInserted)	{
+		if(temp->x < toBeInserted->x)	{
+			if(temp->y < toBeInserted->y)	{
+				temp->SW = toBeInserted;
+			}
+			else	{
+			    temp->NW = toBeInserted;
+			}
+		}
+
+		else if(temp->y < toBeInserted->y)	{
+		    temp->SE = toBeInserted;
+		}
+		else	{
+		    temp->NE = toBeInserted;
+		}
+	}
+
 	bool insert(struct Node* toBeInserted)	{
 			if(root == NULL)	{
 				root = toBeInserted;
@@ -69,11 +84,14 @@ public:
 
             struct Node *temp = root;
 			while(temp != NULL && !equalCoordinates(temp, toBeInserted))	{
-				cout<<temp->x;
-				temp = getQuadrant(temp, toBeInserted);
-				if(temp == NULL)    {
-				    temp = toBeInserted;
+				struct Node* quadrant = getQuadrant(temp, toBeInserted);
+				if(quadrant == NULL)    {
+				    insertPointInFinalQuadrant(temp, toBeInserted);
+				    temp = NULL;
 				    return true;
+				}
+				else    {
+				    temp = quadrant;
 				}
 			}
 
@@ -84,6 +102,16 @@ public:
 		struct Node* temp = makeNode(x,y);
 		return insert(temp);
 	}
+
+    void sampleInput()   {
+        insert(4,4);
+    	insert(3,3);
+    	insert(2,2);
+    	insert(1,1);
+    	insert(0,0);
+    	insert(5,6);
+    	insert(7,8);
+    }
 
 	queue<struct Node*> q;
 	void levelOrderTraversal(struct Node* temp) {
@@ -108,23 +136,13 @@ public:
 };
 
 int main()	{
-	cout<<"HI"<<endl;
-	PointQuadtree pointQuadtree;
-	//struct Node* root = NULL;
 
-	pointQuadtree.insert(4,4);
-	cout<<endl;
-	pointQuadtree.insert(3,3);
-	cout<<endl;
-	pointQuadtree.insert(2,2);
-	cout<<endl;
-	pointQuadtree.insert(1,1);
-	cout<<endl;
-	pointQuadtree.insert(0,0);
-	cout<<endl;
-	pointQuadtree.insert(5,6);
+	PointQuadtree pointQuadtree;
+
+	pointQuadtree.sampleInput();
 
 	//traverse tree using level order traversal
+	cout << "Level Order Traversal using BFS: ";
 	pointQuadtree.levelOrderTraversal(root);
 
 
