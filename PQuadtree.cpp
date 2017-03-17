@@ -113,8 +113,34 @@ public:
     	insert(7,8);
     }
 
-	queue<struct Node*> q;
+    bool search(struct Node* toBeSearched) {
+        if(root == NULL)	{
+			return false;
+		}
+
+		if(equalCoordinates(root, toBeSearched))    {
+		    return true;
+		}
+
+        struct Node *temp = root;
+        while(temp != NULL) {
+            if(equalCoordinates(temp, toBeSearched))    {
+                return true;
+            }
+            else    {
+                temp = getQuadrant(temp, toBeSearched);
+            }
+        }
+        return false;
+    }
+
+    bool search(double x, double y) {
+        struct Node* temp = makeNode(x,y);
+		return search(temp);
+    }
+
 	void levelOrderTraversal(struct Node* temp) {
+	    queue<struct Node*> q;
 	    if(q.empty())
 	        q.push(temp);
 
@@ -140,6 +166,12 @@ int main()	{
 	PointQuadtree pointQuadtree;
 
 	pointQuadtree.sampleInput();
+
+	cout << pointQuadtree.search(4,4) << endl;
+	cout << pointQuadtree.search(1,1) << endl;
+	cout << pointQuadtree.search(7,8) << endl;
+	cout << pointQuadtree.search(7,7) << endl;
+	cout << pointQuadtree.search(80,44) << endl;
 
 	//traverse tree using level order traversal
 	cout << "Level Order Traversal using BFS: ";
