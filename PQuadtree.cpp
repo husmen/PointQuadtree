@@ -29,6 +29,7 @@ struct Node* makeNode(double x, double y)	{
 class PointQuadtree	{
 public:
 
+    //check to see if two Node structs are equal
 	bool equalCoordinates(struct Node* temp, struct Node* toBeInserted)	{
 		if(temp->x == toBeInserted->x && temp->y == toBeInserted->y)	{
 			return true;
@@ -76,6 +77,7 @@ public:
 		}
 	}
 
+	//insert: @return true for successful search, false for unsuccessful search
 	bool insert(struct Node* toBeInserted)	{
 			if(root == NULL)	{
 				root = toBeInserted;
@@ -98,11 +100,13 @@ public:
 			return false;
 	}
 
+    //insert: @return true for successful search, false for unsuccessful search
 	bool insert(double x, double y)	{
 		struct Node* temp = makeNode(x,y);
 		return insert(temp);
 	}
 
+    //sample input for testing
     void sampleInput()   {
         insert(4,4);
     	insert(3,3);
@@ -113,6 +117,7 @@ public:
     	insert(7,8);
     }
 
+    //searching: @return true for successful search, false for unsuccessful search
     bool search(struct Node* toBeSearched) {
         if(root == NULL)	{
 			return false;
@@ -134,11 +139,13 @@ public:
         return false;
     }
 
+    //searching: @return true for successful search, false for unsuccessful search
     bool search(double x, double y) {
         struct Node* temp = makeNode(x,y);
 		return search(temp);
     }
 
+    //function for level order traversal using BFS
 	void levelOrderTraversal(struct Node* temp) {
 	    queue<struct Node*> q;
 	    if(q.empty())
