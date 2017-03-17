@@ -6,7 +6,6 @@
 using namespace std;
 
 struct Node	{
-public:
 	double x;
 	double y;
 	Node* NW;
@@ -17,7 +16,7 @@ public:
 	//constructor
 	//Node(double x, double y):  x(x),y(y),NW(NULL),NE(NULL),SE(NULL),SW(NULL) {}
 } ;
-struct Node* root;
+struct Node* root=NULL;
 
 struct Node* makeNode(double x, double y)	{
 	struct Node* temp = new Node;
@@ -33,6 +32,7 @@ struct Node* makeNode(double x, double y)	{
 
 class PointQuadtree	{
 public:
+
 	bool equalCoordinates(struct Node* temp, struct Node* toBeInserted)	{
 		if(temp->x == toBeInserted->x && temp->y == toBeInserted->y)	{
 			return true;
@@ -43,8 +43,7 @@ public:
 	}
 
 	//return the successive quadrant where toBeInserted will be further inserted
-	Node* getQuadrant(struct Node* temp, struct Node* toBeInserted)	{
-		cout<<temp->x<<" ";
+	struct Node* getQuadrant(struct Node* temp, struct Node* toBeInserted)	{
 		if(temp->x < toBeInserted->x)	{
 			if(temp->y < toBeInserted->y)	{
 				return temp->SW;
@@ -54,35 +53,36 @@ public:
 			}
 		}
 
-		if(temp->y < toBeInserted->y)	{
+		else if(temp->y < toBeInserted->y)	{
 			return temp->SE;
 		}
 		else	{
 			return temp->NE;
 		}
-
-
 	}
 
-	bool insert(struct Node* root, struct Node* toBeInserted)	{
+	bool insert(struct Node* toBeInserted)	{
 			if(root == NULL)	{
-				cout<<toBeInserted->x<<" ";
 				root = toBeInserted;
 				return true;
 			}
 
-			struct Node* temp = root;
+            struct Node *temp = root;
 			while(temp != NULL && !equalCoordinates(temp, toBeInserted))	{
-				//Node* temp_ = temp;
-				struct Node* quadrant = getQuadrant(temp, toBeInserted);
-				insert(quadrant, toBeInserted);
+				cout<<temp->x;
+				temp = getQuadrant(temp, toBeInserted);
+				if(temp == NULL)    {
+				    temp = toBeInserted;
+				    return true;
+				}
 			}
-			return true;
+
+			return false;
 	}
 
-	bool insert(struct Node* root, double x, double y)	{
+	bool insert(double x, double y)	{
 		struct Node* temp = makeNode(x,y);
-		return insert(root, temp);
+		return insert(temp);
 	}
 
 	queue<struct Node*> q;
@@ -112,15 +112,20 @@ int main()	{
 	PointQuadtree pointQuadtree;
 	//struct Node* root = NULL;
 
-	pointQuadtree.insert(root, 4,4);
-	pointQuadtree.insert(root, 3,3);
-	pointQuadtree.insert(root, 2,2);
-	pointQuadtree.insert(root, 1,1);
-	pointQuadtree.insert(root, 0,0);
-	pointQuadtree.insert(root, 5,6);
+	pointQuadtree.insert(4,4);
+	cout<<endl;
+	pointQuadtree.insert(3,3);
+	cout<<endl;
+	pointQuadtree.insert(2,2);
+	cout<<endl;
+	pointQuadtree.insert(1,1);
+	cout<<endl;
+	pointQuadtree.insert(0,0);
+	cout<<endl;
+	pointQuadtree.insert(5,6);
 
 	//traverse tree using level order traversal
-	//pointQuadtree->levelOrderTraversal(root);
+	pointQuadtree.levelOrderTraversal(root);
 
 
 	return 0;
